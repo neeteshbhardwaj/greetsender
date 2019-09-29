@@ -2,6 +2,8 @@ package com.trickyjava.greetsender.model;
 
 import org.springframework.data.annotation.Id;
 
+import java.util.Date;
+
 public class Recording {
     @Id
     private String id;
@@ -13,6 +15,8 @@ public class Recording {
     private String browserDetails;
 
     private String ip;
+
+    private Date timestamp;
 
     public String getId() {
         return id;
@@ -52,5 +56,13 @@ public class Recording {
 
     public void setIp(String ip) {
         this.ip = ip;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

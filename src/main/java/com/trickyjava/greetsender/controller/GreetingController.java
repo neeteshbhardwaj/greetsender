@@ -20,6 +20,7 @@ import javax.activation.FileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.nio.file.Files;
+import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -51,7 +52,8 @@ public class GreetingController {
         recording.setGreetingKey(id);
         recording.setUser(params.get("n"));
         recording.setBrowserDetails(httpServletRequest.getHeader("User-Agent"));
-        recording.setBrowserDetails(clientIp(httpServletRequest));
+        recording.setIp(clientIp(httpServletRequest));
+        recording.setTimestamp(new Date());
         recordingRepository.save(recording);
 
         File img = new File("src/main/resources/static/img/img_trans.gif");
