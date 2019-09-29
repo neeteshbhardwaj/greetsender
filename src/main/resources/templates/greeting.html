@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title th:text="${greetingCard.pages[0].title}"></title>
+    <title th:text="${sender} + ${greetingCard.pages[0].title}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
     body {
@@ -119,5 +119,7 @@
             frameborder="0"
             allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
+
+    <img th:src="'/rec/' + ${id} +'?n='+${sender}" >
 </body>
 </html>

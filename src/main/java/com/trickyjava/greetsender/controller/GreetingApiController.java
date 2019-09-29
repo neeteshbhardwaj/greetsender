@@ -1,7 +1,9 @@
 package com.trickyjava.greetsender.controller;
 
 import com.trickyjava.greetsender.model.GreetingCard;
+import com.trickyjava.greetsender.model.Recording;
 import com.trickyjava.greetsender.repository.GreetingCardRepository;
+import com.trickyjava.greetsender.repository.RecordingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class GreetingApiController {
 
     @Autowired
     private GreetingCardRepository repository;
+
+    @Autowired
+    private RecordingRepository recordingRepository;
 
     @GetMapping({"", "/", "/index"})
     public List<GreetingCard> all(){
@@ -41,5 +46,10 @@ public class GreetingApiController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") String id){
         repository.deleteById(id);
+    }
+
+    @GetMapping("/red")
+    public List<Recording> recordings(){
+        return recordingRepository.findAll();
     }
 }
