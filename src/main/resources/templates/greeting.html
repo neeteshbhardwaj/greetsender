@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${greetingCard.pages[0].title}"></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style>
+    body {
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position-y: 110px;
+    }
+
+    .title {
+        text-align: center;
+        font-family: cursive;
+        font-size: 48px;
+    }
+
+    .message {
+        text-align: center;
+    }
+
+    .controls {
+        width: 75px;
+        height: 160px;
+        text-align: center;
+        position: fixed;
+        left: 0;
+        top: 100px;
+    }
+
+    .control {
+        background-repeat: no-repeat;
+        width: 75px;
+        height: 75px;
+        background: url(/img/controls.png);
+        cursor: pointer;
+        background-size: 300px 300px;
+        border-radius: 100px;
+    }
+
+    .play {
+        background-position: -37px -57px;
+    }
+
+    .pause {
+        background-position: -174px -57px;
+    }
+
+    .mute {
+       background-position: -43px -164px;
+    }
+
+    .unmute {
+        background-position: -478px -162px;
+    }
+</style>
+</head>
+<body th:background="${greetingCard.pages[0].background}">
+    <h1 class="title" th:text="${sender} + ${greetingCard.pages[0].title}"></h1>
+    <div class="message" th:text="${greetingCard.pages[0].message}"></div>
+
+    <div th:if="${greetingCard.pages[0].audio.enabled}">
+        <audio id="player" th:src="${greetingCard.pages[0].audio.filePath}"></audio>
+
+        <div class="controls">
+            <img id="play" class="control play" src="/img/img_trans.gif" width="1" height="1"><br>
+
+            <img id="mute" class="control mute" src="/img/img_trans.gif" width="1" height="1"><br>
+
+            <script type="text/javascript">
+                (function(){
+                    var player = document.getElementById('player');
+                    var playControl = document.getElementById('play');
+                    var muteControl = document.getElementById('mute');
+                    var isPlaying = false;
+                    playControl.onclick = function(){
+                        if(isPlaying) {
+                            player.pause();
+                        }else{
+                            player.play();
+                        }
+
+                        isPlaying = !isPlaying;
+
+                        switchClass(playControl, 'play');
+                        switchClass(playControl, 'pause');
+                    };
+
+                     muteControl.onclick = function(){
+                        player.muted = !player.muted;
+
+                        switchClass(muteControl, 'mute');
+                        switchClass(muteControl, 'unmute');
+                    };
+
+                    function switchClass(element, clazz){
+                        if (element.classList) {
+                          element.classList.toggle(clazz);
+                        } else {
+                          // For IE9
+                          var classes = element.className.split(" ");
+                          var i = classes.indexOf(clazz);
+
+                          if (i >= 0)
+                            classes.splice(i, 1);
+                          else
+                            classes.push(clazz);
+                            element.className = classes.join(" ");
+                        }
+                    }
+                })();
+            </script>
+        </div>
+    </div>
+
+    <iframe th:if="${greetingCard.pages[0].video.enabled}" width="560" height="315"
+            th:src="'https://www.youtube.com/embed/'+ ${greetingCard.pages[0].video.youtubeId}"
+            frameborder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen></iframe>
+</body>
+</html>
