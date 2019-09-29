@@ -3,123 +3,168 @@
 <head>
     <title th:text="${sender} + ${greetingCard.pages[0].title}"></title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://kit.fontawesome.com/00dfc8f968.js" crossorigin="anonymous"></script>
     <style>
     body {
       background-repeat: no-repeat;
       background-size: cover;
-      background-position-y: 110px;
+      background-position-y: 180px;
     }
 
     .title {
         text-align: center;
         font-family: cursive;
-        font-size: 48px;
+        font-size: 36px;
     }
 
     .message {
         text-align: center;
     }
 
-    .controls {
-       width: 150px;
-        height: 320px;
-        text-align: center;
-        position: fixed;
-        left: 0;
-        top: 150px;
-    }
-
     .control {
-        background-repeat: no-repeat;
-        width: 150px;
-        height: 150px;
-        background: url(/img/controls.png);
-        cursor: pointer;
-        background-size: 600px 600px;
-        border-radius: 100px;
-    }
+		font-size: 80px;
+		display: block;
+		cursor: pointer;
+	}
 
-    .play {
-        background-position: -74px -114px;
-    }
+	.controls {
+		display: block;
+		position: fixed;
+		top: 160px;
+	}
 
-    .pause {
-        background-position: -348px -114px;
-    }
+	.audio-player {
+		left: 0;
+	}
 
-    .mute {
-       background-position: -84px -325px;
-    }
+	.edit-share {
+		right: 0;
+	}
 
-    .unmute {
-        background-position: -359px -325px;
-    }
+	.glow {
+	  color: #fff;
+	  text-align: center;
+	  -webkit-animation: glow 1s ease-in-out infinite alternate;
+	  -moz-animation: glow 1s ease-in-out infinite alternate;
+	  animation: glow 1s ease-in-out infinite alternate;
+	}
+
+	@-webkit-keyframes glow {
+	  from {
+		text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+	  }
+
+	  to {
+		text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+	  }
+	}
+
+	.edit-popup {
+		width: 80%;
+		margin: auto;
+		display: none;
+	}
 </style>
 </head>
 <body th:background="${greetingCard.pages[0].background}">
-    <h1 class="title" th:text="${sender} + ${greetingCard.pages[0].title}"></h1>
-    <div class="message" th:text="${greetingCard.pages[0].message}"></div>
+<h1 class="title glow" th:text="${sender} + ${greetingCard.pages[0].title}"></h1>
 
-    <div th:if="${greetingCard.pages[0].audio.enabled}">
-        <audio id="player" th:src="${greetingCard.pages[0].audio.filePath}"></audio>
+<div class="edit-popup">
+    <form action="" class="w3-container w3-card-4 w3-light-grey">
+        <h2>Create with your name</h2>
 
-        <div class="controls">
-            <img id="play" class="control play" src="/img/img_trans.gif" width="1" height="1"><br>
+        <p><label>Name: </label>
+            <input class="w3-input w3-border" name="sender" type="text"></p>
 
-            <img id="mute" class="control mute" src="/img/img_trans.gif" width="1" height="1"><br>
+        <p style="text-align:center">
+            <button class="w3-btn w3-blue-grey">Create</button><span>  </span>
+            <button id="close" class="w3-btn w3-red">Close</button>
+        </p>
 
-            <script type="text/javascript">
-                (function(){
-                    var player = document.getElementById('player');
-                    var playControl = document.getElementById('play');
-                    var muteControl = document.getElementById('mute');
-                    var isPlaying = false;
-                    playControl.onclick = function(){
-                        if(isPlaying) {
-                            player.pause();
-                        }else{
-                            player.play();
-                        }
+    </form>
+</div>
 
-                        isPlaying = !isPlaying;
+<div class="controls edit-share">
+    <i id="edit" class="control far fa-edit"></i>
 
-                        switchClass(playControl, 'play');
-                        switchClass(playControl, 'pause');
-                    };
+    <a id="share" class="control fab fa-whatsapp" href="" data-action="share/whatsapp/share" style="text-decoration:none"></a>
+</div>
 
-                     muteControl.onclick = function(){
-                        player.muted = !player.muted;
+<div class="controls audio-player" th:if="${greetingCard.pages[0].audio.enabled}">
+    <audio id="player" th:src="${greetingCard.pages[0].audio.filePath}"></audio>
 
-                        switchClass(muteControl, 'mute');
-                        switchClass(muteControl, 'unmute');
-                    };
+    <div class="controls">
+        <i id="play" class="control far fa-play-circle"></i>
 
-                    function switchClass(element, clazz){
-                        if (element.classList) {
-                          element.classList.toggle(clazz);
-                        } else {
-                          // For IE9
-                          var classes = element.className.split(" ");
-                          var i = classes.indexOf(clazz);
-
-                          if (i >= 0)
-                            classes.splice(i, 1);
-                          else
-                            classes.push(clazz);
-                            element.className = classes.join(" ");
-                        }
-                    }
-                })();
-            </script>
-        </div>
+        <i id="mute" class="control fas fa-volume-up"></i>
     </div>
+</div>
 
-    <iframe th:if="${greetingCard.pages[0].video.enabled}" width="560" height="315"
-            th:src="'https://www.youtube.com/embed/'+ ${greetingCard.pages[0].video.youtubeId}"
-            frameborder="0"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen></iframe>
+<div> </div>
 
-    <img th:src="'/rec/' + ${id} +'?n='+${sender}" >
+<iframe th:if="${greetingCard.pages[0].video.enabled}" width="560" height="315"
+        th:src="'https://www.youtube.com/embed/'+ ${greetingCard.pages[0].video.youtubeId}"
+        frameborder="0"
+        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+
+<img th:src="'/rec/' + ${id} +'?n='+${sender}" >
+
+<script type="text/javascript" src="/js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+        $(document).ready(function() {
+            var player = {
+                _self: $("#player")[0],
+                isPlaying: false,
+                isMuted: false,
+                play: function(){
+                    player._self.play();
+                },
+                pause: function(){
+                    player._self.pause();
+                },
+                mute: function(){
+                    player._self.muted = !player._self.muted;
+                },
+                unmute: function(){
+                    player._self.muted = !player._self.muted;
+                }
+            };
+
+            $("#play").click(function(){
+                if(player.isPlaying){
+                    player.pause();
+                }else {
+                    player.play();
+                }
+                $(this).toggleClass("fa-play-circle");
+                $(this).toggleClass("fa-pause-circle");
+				player.isPlaying = !player.isPlaying;
+            });
+
+            $("#mute").click(function(){
+                 if(player.isMuted){
+                    player.unmute();
+                }else {
+                    player.mute();
+                }
+                $(this).toggleClass("fa-volume-mute");
+                $(this).toggleClass("fa-volume-up");
+                player.isMuted = !player.isMuted;
+            });
+
+			$("#edit").click(function(){
+				$(".edit-popup").toggle();
+			});
+
+			$("#close").click(function(){
+				$(".edit-popup").toggle();
+			});
+
+			$("#share").attr('href', 'whatsapp://send?' + window.location.href);
+        });
+    </script>
 </body>
 </html>

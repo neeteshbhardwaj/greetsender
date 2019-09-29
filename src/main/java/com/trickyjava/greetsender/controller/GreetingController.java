@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -37,7 +38,7 @@ public class GreetingController {
     private ObjectMapper objectMapper = new ObjectMapper();
 
     @GetMapping("/a/{id}")
-    public ModelAndView greetingA(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
+    public ModelAndView display(@PathVariable("id") String id, @RequestParam Map<String, String> params) {
         GreetingCard greetingCard = repository.findByIdAndEnabled(id, true);
         ModelAndView modelAndView = new ModelAndView(greetingCard.getView());
         modelAndView.addObject("greetingCard", greetingCard);
@@ -56,7 +57,7 @@ public class GreetingController {
         recording.setTimestamp(new Date());
         recordingRepository.save(recording);
 
-        File img = new File("src/main/resources/static/img/img_trans.gif");
+        File img = new File("src/main/resources/static/img/transparent.gif");
         return ResponseEntity.ok().contentType(MediaType.valueOf(FileTypeMap.getDefaultFileTypeMap().getContentType(img))).body(Files.readAllBytes(img.toPath()));
     }
 
